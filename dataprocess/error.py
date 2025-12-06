@@ -6,9 +6,9 @@ import random
 # ================================
 # 你的数据集路径（已替换）
 # ================================
-IMAGE_DIR = r"C:\Users\shish\Desktop\cottonweed_split\train\images"
-ANNOT_PATH = r"C:\Users\shish\Desktop\cottonweed_split\train\annotations"
-OUTPUT_ROOT = r"C:\Users\shish\Desktop\cottonweed_split\noise_datasets"
+IMAGE_DIR = r"E:\cottonweed_split\train\image"
+ANNOT_PATH = r"E:\cottonweed_split\train\annotations"
+OUTPUT_ROOT = r"E:\cottonweed_split\noise_datasets"
 os.makedirs(OUTPUT_ROOT, exist_ok=True)
 
 # 三个噪声比例
