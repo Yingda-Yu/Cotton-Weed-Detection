@@ -37,7 +37,7 @@ def save_coco(data, path):
 # ================================
 # 1) Missing（漏标）
 # ================================
-def apply_missing(annotations, ratio):
+def apply_missing(coco, annotations, ratio):
     return [ann for ann in annotations if random.random() > ratio]
 
 
@@ -47,6 +47,10 @@ def apply_missing(annotations, ratio):
 def apply_spurious(coco, annotations, ratio):
     images = {img["id"]: img for img in coco["images"]}
     anns = annotations.copy()
+
+    # 获取现有标注的最大 ID，避免冲突
+    max_id = max([ann["id"] for ann in annotations], default=0)
+    next_id = max_id + 1
 
     num_fake = int(len(annotations) * ratio)
 
@@ -61,7 +65,7 @@ def apply_spurious(coco, annotations, ratio):
         y = random.uniform(0, img_h - h)
 
         fake_ann = {
-            "id": random.randint(10000000, 99999999),
+            "id": next_id,
             "image_id": img_info["id"],
             "category_id": random.randint(1, NUM_CLASSES),
             "bbox": [x, y, w, h],
@@ -69,6 +73,7 @@ def apply_spurious(coco, annotations, ratio):
             "iscrowd": 0
         }
         anns.append(fake_ann)
+        next_id += 1
 
     return anns
 
@@ -77,9 +82,20 @@ def apply_spurious(coco, annotations, ratio):
 # 3) Mislocated（框位置移动）
 # ================================
 def apply_mislocated(coco, annotations, ratio):
+    images = {img["id"]: img for img in coco["images"]}
     anns = []
     for ann in annotations:
         x, y, w, h = ann["bbox"]
+        
+        # 获取对应图像的尺寸
+        img_info = images.get(ann["image_id"])
+        if img_info is None:
+            # 如果找不到图像信息，保持原标注不变
+            anns.append(ann)
+            continue
+        
+        img_w = img_info["width"]
+        img_h = img_info["height"]
 
         shift = ratio * 0.5
 
@@ -88,10 +104,21 @@ def apply_mislocated(coco, annotations, ratio):
 
         x_new = shift_val(x)
         y_new = shift_val(y)
+        
+        # 确保边界框不超出图像范围
+        x_new = max(0, min(x_new, img_w - w))
+        y_new = max(0, min(y_new, img_h - h))
+        
+        # 确保宽度和高度不会导致超出边界
+        if x_new + w > img_w:
+            w = img_w - x_new
+        if y_new + h > img_h:
+            h = img_h - y_new
 
         anns.append({
             **ann,
             "bbox": [x_new, y_new, w, h],
+            "area": w * h  # 更新面积
         })
     return anns
 
@@ -99,7 +126,7 @@ def apply_mislocated(coco, annotations, ratio):
 # ================================
 # 4) Mislabeled（错误类别）
 # ================================
-def apply_mislabeled(annotations, ratio):
+def apply_mislabeled(coco, annotations, ratio):
     anns = []
     for ann in annotations:
         if random.random() < ratio:

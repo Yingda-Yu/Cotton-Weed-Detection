@@ -14,7 +14,7 @@ from pathlib import Path
 import json
 
 # 配置
-EPOCHS = 10
+EPOCHS = 30  # 测试用，只训练3个epochs
 BATCH_SIZE = 8
 BASELINE_NAME = "yolov8n_baseline_new"
 CLEANED_NAME = "yolov8n_cleaned_new"
