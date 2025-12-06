@@ -1,0 +1,9 @@
+names:
+  0: carpetweed
+  1: morningglory
+  2: palmer_amaranth
+nc: 3
+path: .
+test: test/images
+train: cleaned_train/images
+val: val/images

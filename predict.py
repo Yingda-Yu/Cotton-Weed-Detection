@@ -13,13 +13,13 @@ Submission Format:
     Prediction: "class conf x y w h" (space-separated)
     No detections: "no box"
 
-Learn more: See cotton_weed_starter_notebook.ipynb for explanations
+Learn more: See README.md for project documentation
 """
 
 from pathlib import Path
 import pandas as pd
 import shutil
-from tlc_ultralytics import YOLO
+from ultralytics import YOLO
 
 # ============================================================================
 # CONFIGURATION - Edit these values
@@ -52,7 +52,7 @@ def main():
     if not weights_path.exists():
         print(f"\n!!! ERROR: Model weights not found: {weights_path}")
         print("\n Make sure you:")
-        print("   1. Trained a model first (run train.py)")
+        print("   1. Trained a model first (run train_standard.py)")
         print("   2. Set the correct path in MODEL_WEIGHTS")
         return
 
@@ -180,8 +180,8 @@ def main():
     print("\n Next Steps:")
     print(f"   1. Upload '{OUTPUT_CSV}' to Kaggle")
     print("   2. Check your leaderboard score")
-    print("   3. Analyze errors in Dashboard")
-    print("   4. Fix data issues and retrain!")
+    print("   3. Use SafeDNN-Clean to analyze and fix data issues")
+    print("   4. Retrain with cleaned data!")
     print("\n You have 3 submissions per day - use them wisely!")
 
 

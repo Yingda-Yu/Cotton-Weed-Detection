@@ -33,6 +33,16 @@ mlruns/
 
 # Visualization samples
 visualized_samples/
+quality_issues/
+
+# Cleaned dataset (generated, can be regenerated)
+cleaned_train/
+
+# Intermediate files (can be regenerated)
+quality_report_*.json
+predictions_*_coco.json
+annotations_*_coco.json
+cleaned_*_annotations.json
 
 # Submission files
 submission.csv
@@ -59,4 +69,8 @@ desktop.ini
 *.tmp
 *.temp
 *.bak
+
+# Unused code (optional, can be deleted)
+dataprocess/
+test_label_quality_env.py
 
