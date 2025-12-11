@@ -3,8 +3,8 @@
 
 # Dataset paths (relative to this file)
 path: .  # Root directory
-train: train/images  # Training images
-val: val/images      # Validation images
+train: "cotton weed dataset/train/images"  # Training images
+val: "cotton weed dataset/val/images"      # Validation images
 test: test/images    # Test images (optional)
 
 # Number of classes

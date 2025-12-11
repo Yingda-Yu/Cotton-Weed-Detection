@@ -64,7 +64,7 @@ def yolo_to_pixel(bbox, img_width, img_height):
 
 def visualize_issues(
     quality_report_file="quality_report.json",
-    val_dir="val",
+    val_dir="cotton weed dataset/val",
     output_dir="quality_issues",
     top_n=50
 ):
@@ -110,6 +110,10 @@ def visualize_issues(
     # 创建输出目录
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
+    
+    # 处理路径：如果是"train"或"val"，转换为新路径
+    if val_dir in ["train", "val"]:
+        val_dir = f"cotton weed dataset/{val_dir}"
     
     val_images_dir = Path(val_dir) / "images"
     val_labels_dir = Path(val_dir) / "labels"
@@ -214,8 +218,8 @@ def main():
     parser.add_argument(
         "--val-dir",
         type=str,
-        default="val",
-        help="验证集目录"
+        default="cotton weed dataset/val",
+        help="验证集目录或split名称（train/val）"
     )
     parser.add_argument(
         "--output",

@@ -1,0 +1,58 @@
+{
+  "label": {
+    "noise_type": "label",
+    "noise_ratio": 0.25,
+    "magnitude": null,
+    "clod_auroc": 0.8792735042735044,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  },
+  "location_20": {
+    "noise_type": "location",
+    "noise_ratio": 0.25,
+    "magnitude": 0.2,
+    "clod_auroc": 0.8571428571428572,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  },
+  "location_50": {
+    "noise_type": "location",
+    "noise_ratio": 0.25,
+    "magnitude": 0.5,
+    "clod_auroc": 0.0,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  },
+  "scale_20": {
+    "noise_type": "scale",
+    "noise_ratio": 0.25,
+    "magnitude": 0.2,
+    "clod_auroc": 0.5060601670771162,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  },
+  "scale_50": {
+    "noise_type": "scale",
+    "noise_ratio": 0.25,
+    "magnitude": 0.5,
+    "clod_auroc": 0.5931358346612583,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  },
+  "spurious": {
+    "noise_type": "spurious",
+    "noise_ratio": 0.25,
+    "magnitude": null,
+    "clod_auroc": 0.5,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  },
+  "missing": {
+    "noise_type": "missing",
+    "noise_ratio": 0.25,
+    "magnitude": null,
+    "clod_auroc": 0.0,
+    "objectlab_auroc": null,
+    "num_noisy": 117
+  }
+}

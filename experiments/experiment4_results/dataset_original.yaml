@@ -1,0 +1,8 @@
+names:
+  0: carpetweed
+  1: morningglory
+  2: palmer_amaranth
+nc: 3
+path: D:\python\Cotton Weed Detect
+train: train\images
+val: cotton weed dataset/val/images

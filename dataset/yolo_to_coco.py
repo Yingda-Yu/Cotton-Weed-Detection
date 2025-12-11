@@ -176,8 +176,11 @@ def main():
     if args.output is None:
         args.output = f"annotations_{args.split}_coco.json"
     
+    # 确定数据集目录（新路径）
+    dataset_dir = f"cotton weed dataset/{args.split}"
+    
     # 转换
-    yolo_to_coco(args.split, args.output, args.dataset_yaml)
+    yolo_to_coco(dataset_dir, args.output, args.dataset_yaml)
 
 
 if __name__ == "__main__":

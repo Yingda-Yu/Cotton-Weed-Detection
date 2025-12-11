@@ -22,7 +22,7 @@ import numpy as np
 
 def generate_predictions_coco(
     model_weights,
-    val_dir="val",
+    val_dir_or_split="val",
     annotations_file="annotations_val_coco.json",
     output_file="predictions_coco.json",
     conf_threshold=0.25
@@ -32,7 +32,7 @@ def generate_predictions_coco(
     
     Args:
         model_weights: 模型权重路径
-        val_dir: 验证集目录
+        val_dir_or_split: 验证集目录或split名称（"train"或"val"）
         annotations_file: COCO格式的标注文件（用于获取image_id映射）
         output_file: 输出文件
         conf_threshold: 置信度阈值
@@ -41,6 +41,12 @@ def generate_predictions_coco(
     model_path = Path(model_weights)
     if not model_path.exists():
         raise FileNotFoundError(f"模型权重不存在: {model_path}")
+    
+    # 处理路径：如果是"train"或"val"，转换为新路径
+    if val_dir_or_split in ["train", "val"]:
+        val_dir = f"cotton weed dataset/{val_dir_or_split}"
+    else:
+        val_dir = val_dir_or_split
     
     val_images_dir = Path(val_dir) / "images"
     if not val_images_dir.exists():
@@ -184,7 +190,7 @@ def main():
         "--val-dir",
         type=str,
         default="val",
-        help="验证集目录"
+        help="验证集目录或split名称（train/val）"
     )
     parser.add_argument(
         "--annotations",

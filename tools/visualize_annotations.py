@@ -15,8 +15,8 @@ import yaml
 # ============================================================================
 NUM_SAMPLES = 10  # 要可视化的样本数量
 OUTPUT_DIR = Path("visualized_samples")  # 输出目录
-TRAIN_IMAGES_DIR = Path("train/images")
-TRAIN_LABELS_DIR = Path("train/labels")
+TRAIN_IMAGES_DIR = Path("cotton weed dataset/train/images")
+TRAIN_LABELS_DIR = Path("cotton weed dataset/train/labels")
 DATASET_YAML = Path("dataset.yaml")
 
 # 类别颜色 (BGR格式，OpenCV使用)

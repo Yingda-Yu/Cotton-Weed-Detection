@@ -1,0 +1,86 @@
+{
+  "label": {
+    "noise_type": "label",
+    "noise_ratio": 0.2,
+    "magnitude": null,
+    "auroc_iou_0.5": 0.7876304023845008,
+    "auroc_by_iou": {
+      "0.4": 0.7910557184750733,
+      "0.5": 0.7876304023845008,
+      "0.6": 0.8092592592592591
+    },
+    "num_noisy": 94
+  },
+  "location_20": {
+    "noise_type": "location",
+    "noise_ratio": 0.2,
+    "magnitude": 0.2,
+    "auroc_iou_0.5": 0.8571428571428572,
+    "auroc_by_iou": {
+      "0.4": 0.8571428571428572,
+      "0.5": 0.8571428571428572,
+      "0.6": 0.0
+    },
+    "num_noisy": 94
+  },
+  "location_50": {
+    "noise_type": "location",
+    "noise_ratio": 0.2,
+    "magnitude": 0.5,
+    "auroc_iou_0.5": 0.0,
+    "auroc_by_iou": {
+      "0.4": 0.0,
+      "0.5": 0.0,
+      "0.6": 0.0
+    },
+    "num_noisy": 94
+  },
+  "scale_20": {
+    "noise_type": "scale",
+    "noise_ratio": 0.2,
+    "magnitude": 0.2,
+    "auroc_iou_0.5": 0.5143207855973814,
+    "auroc_by_iou": {
+      "0.4": 0.5071251199277611,
+      "0.5": 0.5143207855973814,
+      "0.6": 0.5164089395564084
+    },
+    "num_noisy": 94
+  },
+  "scale_50": {
+    "noise_type": "scale",
+    "noise_ratio": 0.2,
+    "magnitude": 0.5,
+    "auroc_iou_0.5": 0.5875049382019302,
+    "auroc_by_iou": {
+      "0.4": 0.5352728709295107,
+      "0.5": 0.5875049382019302,
+      "0.6": 0.664004740673853
+    },
+    "num_noisy": 94
+  },
+  "spurious": {
+    "noise_type": "spurious",
+    "noise_ratio": 0.2,
+    "magnitude": null,
+    "auroc_iou_0.5": 0.5,
+    "auroc_by_iou": {
+      "0.4": 0.5,
+      "0.5": 0.5,
+      "0.6": 0.5
+    },
+    "num_noisy": 94
+  },
+  "missing": {
+    "noise_type": "missing",
+    "noise_ratio": 0.2,
+    "magnitude": null,
+    "auroc_iou_0.5": 0.0,
+    "auroc_by_iou": {
+      "0.4": 0.0,
+      "0.5": 0.0,
+      "0.6": 0.0
+    },
+    "num_noisy": 94
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "experiment": "Dataset Variants",
+  "timestamp": "2025-12-11 21:46:15",
+  "split": "train",
+  "suggestions_ratio": 0.2,
+  "suggestions_stats": {
+    "total_suggestions": 493,
+    "applied_suggestions": 98,
+    "quality_threshold": 0.03999999999999998,
+    "original_annotations": 1061,
+    "suggestions_annotations": 724
+  },
+  "results": {
+    "original": {
+      "mAP50": 0.37096,
+      "mAP75": null,
+      "mAP": 0.18937,
+      "all_metrics": {
+        "metrics/precision(B)": 0.6260273665984132,
+        "metrics/recall(B)": 0.5839359441781607,
+        "metrics/mAP50(B)": 0.37096,
+        "metrics/mAP50-95(B)": 0.18937,
+        "fitness": 0.43705410395647026
+      }
+    },
+    "suggestions": {
+      "mAP50": 0.55789,
+      "mAP75": null,
+      "mAP": 0.41051,
+      "all_metrics": {
+        "metrics/precision(B)": 0.6708370137292997,
+        "metrics/recall(B)": 0.5228990187722048,
+        "metrics/mAP50(B)": 0.55789,
+        "metrics/mAP50-95(B)": 0.41051,
+        "fitness": 0.423922064886315
+      }
+    }
+  },
+  "improvement": {
+    "absolute": 0.18692999999999999,
+    "percentage": 50.39087772266551
+  }
+}

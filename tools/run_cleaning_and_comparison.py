@@ -191,7 +191,7 @@ def step4_create_dataset_yaml():
     # 创建新配置（使用清洗后的训练集，验证集保持原始）
     cleaned_config = original_config.copy()
     cleaned_config["train"] = f"{CLEANED_TRAIN_DIR}/images"
-    cleaned_config["val"] = "val/images"  # 保持原始验证集，用于真实评估
+    cleaned_config["val"] = "cotton weed dataset/val/images"  # 保持原始验证集，用于真实评估
     
     # 保存新配置
     cleaned_yaml = "dataset_cleaned.yaml"

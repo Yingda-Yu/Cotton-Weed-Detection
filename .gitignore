@@ -15,10 +15,11 @@ env/
 ENV/
 .venv
 
-# Dataset directories (exclude from git)
+# Dataset directories (exclude from git - too large)
 train/
 val/
 test/
+cotton weed dataset/
 
 # Model weights (too large for git)
 *.pt
@@ -26,7 +27,7 @@ test/
 *.onnx
 *.engine
 
-# Training results
+# Training results (too large)
 runs/
 wandb/
 mlruns/
@@ -38,11 +39,40 @@ quality_issues/
 # Cleaned dataset (generated, can be regenerated)
 cleaned_train/
 
+# Output files (temporary JSON files, can be regenerated)
+outputs/
+temp_*.json
+
 # Intermediate files (can be regenerated)
 quality_report_*.json
 predictions_*_coco.json
 annotations_*_coco.json
 cleaned_*_annotations.json
+complete_workflow_report.json
+
+# Experiment results - exclude large files but keep important reports
+# First, keep important result charts and reports in results directories
+!experiments/*_results/
+!experiments/*_results/*.json
+!experiments/*_results/*.png
+!experiments/*_results/*.md
+
+# Then exclude large directories and files
+experiments/*/runs/
+experiments/*/train_*/
+experiments/*/*.cache
+experiments/*/labels.cache
+
+# Exclude training/validation batch images
+experiments/**/train_batch*.jpg
+experiments/**/val_batch*.jpg
+experiments/**/val_batch*.png
+experiments/**/labels.jpg
+experiments/**/confusion_matrix*.png
+
+# Model weights in experiments
+experiments/**/weights/
+experiments/**/*.pt
 
 # Submission files
 submission.csv
@@ -70,7 +100,10 @@ desktop.ini
 *.temp
 *.bak
 
+# Cache files
+*.cache
+labels.cache
+
 # Unused code (optional, can be deleted)
 dataprocess/
 test_label_quality_env.py
-
