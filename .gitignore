@@ -35,6 +35,9 @@ mlruns/
 # Visualization samples
 visualized_samples/
 quality_issues/
+quality_issues_visualization/
+comparison_metrics/*.png
+comparison_metrics/*.jpg
 
 # Cleaned dataset (generated, can be regenerated)
 cleaned_train/

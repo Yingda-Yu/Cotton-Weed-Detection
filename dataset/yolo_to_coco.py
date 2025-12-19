@@ -70,13 +70,24 @@ def yolo_to_coco(yolo_dir, output_file, dataset_yaml="dataset.yaml"):
     image_files = sorted(images_dir.glob("*.jpg"))
     print(f"找到 {len(image_files)} 张图片")
     
+    skipped_images = 0
     for img_path in image_files:
         try:
+            # 检查是否有对应的标签文件
+            label_path = labels_dir / f"{img_path.stem}.txt"
+            if not label_path.exists():
+                skipped_images += 1
+                if skipped_images <= 10:  # 只显示前10个警告
+                    print(f"警告: 图片 {img_path.name} 没有对应的标注文件，跳过")
+                elif skipped_images == 11:
+                    print(f"警告: 还有更多图片没有标注文件，将静默跳过...")
+                continue
+            
             # 读取图片尺寸
             img = Image.open(img_path)
             width, height = img.size
             
-            # 添加图片信息
+            # 添加图片信息（只有有标注的图片才添加）
             coco_data["images"].append({
                 "id": image_id,
                 "file_name": img_path.name,
@@ -85,7 +96,6 @@ def yolo_to_coco(yolo_dir, output_file, dataset_yaml="dataset.yaml"):
             })
             
             # 读取对应的标签
-            label_path = labels_dir / f"{img_path.stem}.txt"
             if label_path.exists():
                 with open(label_path, 'r', encoding='utf-8') as f:
                     for line in f:
@@ -138,7 +148,10 @@ def yolo_to_coco(yolo_dir, output_file, dataset_yaml="dataset.yaml"):
         json.dump(coco_data, f, indent=2, ensure_ascii=False)
     
     print(f"\n✅ 转换完成!")
-    print(f"   图片数量: {len(coco_data['images'])}")
+    print(f"   总图片数: {len(image_files)}")
+    print(f"   有标注的图片: {len(coco_data['images'])}")
+    if skipped_images > 0:
+        print(f"   跳过图片数: {skipped_images} (没有标注文件)")
     print(f"   标注数量: {len(coco_data['annotations'])}")
     print(f"   类别数量: {len(coco_data['categories'])}")
     print(f"   保存到: {output_path.absolute()}")

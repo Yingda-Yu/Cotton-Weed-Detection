@@ -130,6 +130,7 @@ def main():
         "val": True,  # 启用验证
         "save": True,  # 保存检查点
         "plots": True,  # 生成训练图表
+        "verbose": True,  # 显示详细训练进度
     }
     
     # 如果workers=0，禁用多进程相关的增强以避免内存问题

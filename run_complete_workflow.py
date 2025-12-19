@@ -14,10 +14,10 @@ from pathlib import Path
 import json
 
 # 配置
-EPOCHS = 30  # 测试用，只训练3个epochs
-BATCH_SIZE = 8
-BASELINE_NAME = "yolov8n_baseline_new"
-CLEANED_NAME = "yolov8n_cleaned_new"
+EPOCHS = 30  # 训练轮数
+BATCH_SIZE = 16  # 使用优化后的batch size
+BASELINE_NAME = "yolov8n_baseline_fast2"  # 使用你刚训练的baseline模型
+CLEANED_NAME = "yolov8n_cleaned_fast"  # 清洗后的模型名称
 BASELINE_MODEL = f"runs/detect/{BASELINE_NAME}/weights/best.pt"
 
 def print_section(title):
@@ -53,10 +53,9 @@ def step1_train_baseline():
     
     # 检查是否已存在
     if Path(BASELINE_MODEL).exists():
-        response = input(f"\n⚠️  Baseline模型已存在: {BASELINE_MODEL}\n是否跳过训练? (y/n): ").strip().lower()
-        if response == 'y':
-            print("✅ 使用已有baseline模型")
-            return True
+        print(f"\n✅ Baseline模型已存在: {BASELINE_MODEL}")
+        print("   自动跳过baseline训练，使用已有模型")
+        return True
     
     print(f"\n🚀 开始训练baseline模型...")
     cmd = [
@@ -67,7 +66,7 @@ def step1_train_baseline():
         "--batch", str(BATCH_SIZE),
         "--imgsz", "640",
         "--device", "0",
-        "--workers", "0",
+        "--workers", "4",  # 使用优化后的workers
         "--name", BASELINE_NAME
     ]
     
@@ -222,7 +221,7 @@ def step5_train_cleaned():
         "--batch", str(BATCH_SIZE),
         "--imgsz", "640",
         "--device", "0",
-        "--workers", "0",
+        "--workers", "4",  # 使用优化后的workers
         "--name", CLEANED_NAME
     ]
     

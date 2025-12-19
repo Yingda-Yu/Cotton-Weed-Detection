@@ -91,35 +91,50 @@ def generate_predictions_coco(
     # 获取所有图片文件
     image_files = sorted(val_images_dir.glob("*.jpg"))
     print(f"找到 {len(image_files)} 张验证图片")
+    print(f"标注文件中有 {len(image_id_map)} 张图片")
     print(f"置信度阈值: {conf_threshold}")
     print("\n正在生成预测...")
     
     annotation_id = 0
     total_predictions = 0
+    skipped_count = 0
     
     for i, img_path in enumerate(image_files, 1):
         if img_path.name not in image_id_map:
-            print(f"警告: 图片 {img_path.name} 不在标注文件中，跳过")
+            skipped_count += 1
+            if skipped_count <= 20:  # 只显示前20个警告
+                print(f"警告: 图片 {img_path.name} 不在标注文件中，跳过")
+            elif skipped_count == 21:
+                print(f"警告: 还有更多图片不在标注文件中，将静默跳过...")
             continue
         
         # 运行预测
-        results = model.predict(
-            str(img_path),
-            conf=conf_threshold,
-            verbose=False,
-            imgsz=640
-        )
+        try:
+            results = model.predict(
+                str(img_path),
+                conf=conf_threshold,
+                verbose=False,
+                imgsz=640
+            )
+        except Exception as e:
+            print(f"警告: 预测图片 {img_path.name} 时出错: {e}，跳过")
+            continue
         
         # 读取图片尺寸
         try:
             img = Image.open(img_path)
             width, height = img.size
         except Exception as e:
-            print(f"警告: 无法读取图片 {img_path.name}: {e}")
+            print(f"警告: 无法读取图片 {img_path.name}: {e}，跳过")
             continue
         
         # 处理预测结果
+        if not results or len(results) == 0:
+            continue
+            
         for result in results:
+            if not hasattr(result, 'boxes') or result.boxes is None:
+                continue
             for box in result.boxes:
                 class_id = int(box.cls)
                 conf = float(box.conf)
@@ -167,10 +182,14 @@ def generate_predictions_coco(
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(predictions, f, indent=2, ensure_ascii=False)
     
+    processed_count = len(image_files) - skipped_count
     print(f"\n✅ 预测完成!")
-    print(f"   处理图片: {len(image_files)}")
+    print(f"   总图片数: {len(image_files)}")
+    print(f"   处理图片: {processed_count}")
+    print(f"   跳过图片: {skipped_count} (不在标注文件中)")
     print(f"   预测数量: {total_predictions}")
-    print(f"   平均每张图片: {total_predictions/len(image_files):.2f} 个预测")
+    if processed_count > 0:
+        print(f"   平均每张图片: {total_predictions/processed_count:.2f} 个预测")
     print(f"   保存到: {output_path.absolute()}")
     
     return predictions

@@ -1,0 +1,38 @@
+{
+  "baseline": {
+    "epochs": 30,
+    "final_metrics": {
+      "metrics/mAP50(B)": 0.74522,
+      "metrics/mAP50-95(B)": 0.59756,
+      "metrics/precision(B)": 0.77827,
+      "metrics/recall(B)": 0.67526
+    }
+  },
+  "cleaned": {
+    "epochs": 30,
+    "final_metrics": {
+      "metrics/mAP50(B)": 0.73161,
+      "metrics/mAP50-95(B)": 0.62921,
+      "metrics/precision(B)": 0.82085,
+      "metrics/recall(B)": 0.68703
+    }
+  },
+  "improvement": {
+    "metrics/mAP50(B)": {
+      "absolute": -0.013610000000000011,
+      "percentage": -1.8263063256488032
+    },
+    "metrics/mAP50-95(B)": {
+      "absolute": 0.03165000000000007,
+      "percentage": 5.296539259655946
+    },
+    "metrics/precision(B)": {
+      "absolute": 0.04257999999999995,
+      "percentage": 5.471108998162585
+    },
+    "metrics/recall(B)": {
+      "absolute": 0.011770000000000058,
+      "percentage": 1.7430323134792611
+    }
+  }
+}

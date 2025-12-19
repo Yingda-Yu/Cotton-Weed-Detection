@@ -6,4 +6,4 @@ nc: 3
 path: .
 test: test/images
 train: cleaned_train/images
-val: "cotton weed dataset/val/images"
+val: cotton weed dataset/val/images
