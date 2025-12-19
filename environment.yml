@@ -1,22 +1,20 @@
 name: cotton-weed-detect
 channels:
-  - pytorch
-  - conda-forge
   - defaults
+  - conda-forge
 dependencies:
   - python=3.9
-  - pytorch>=2.0.0
-  - torchvision>=0.15.0
-  - torchaudio>=2.0.0
-  - cudatoolkit=11.8  # 如果使用GPU，根据服务器CUDA版本调整
   - pip
   - pip:
-    - ultralytics>=8.0.0
-    - pandas>=1.5.0
-    - numpy>=1.23.0
-    - opencv-python>=4.7.0
-    - pillow>=9.5.0
-    - pyyaml>=6.0
-    - matplotlib>=3.6.0
-    - cleanlab>=2.2.0
-    - scikit-learn>=1.2.0
+      - torch==2.5.1+cu121  # PyTorch 2.5.1 对应 CUDA 12.1/12.6
+      - torchvision==0.18.1+cu121
+      - torchaudio==2.5.1+cu121
+      - ultralytics>=8.0.0
+      - pandas>=1.5.0
+      - numpy>=1.23.0
+      - opencv-python>=4.7.0
+      - pillow>=9.5.0
+      - pyyaml>=6.0
+      - matplotlib>=3.6.0
+      - cleanlab>=2.2.0
+      - scikit-learn>=1.2.0
