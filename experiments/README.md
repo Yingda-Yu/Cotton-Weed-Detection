@@ -1,39 +1,37 @@
-# 实验脚本说明
+# Experiment Scripts
 
-本目录包含6个实验脚本，用于复现论文中的各项实验。
+This directory contains 6 experiment scripts to reproduce the paper experiments.
 
-## 📋 实验列表
+## Experiment list
 
-| 实验 | 脚本 | 状态 | 说明 |
-|------|------|------|------|
-| 实验1 | `experiment1_noise_impact.py` | ✅ 已存在 | 噪声影响分析 |
-| 实验2 | `experiment2_clod_effectiveness.py` | ✅ 新建 | CLOD有效性评估 |
-| 实验3 | `experiment3_clod_vs_sota.py` | ✅ 新建 | CLOD vs SOTA对比（CLOD部分） |
-| 实验4 | `experiment4_dataset_variants.py` | ✅ 新建 | 数据集变体实验 |
-| 实验5 | `experiment5_manual_inspection.py` | ✅ 新建 | 人工检查实验 |
-| 实验6 | `experiment6_iou_threshold.py` | ✅ 新建 | IoU阈值分析 |
+| Experiment | Script | Description |
+|------------|--------|-------------|
+| 1 | `experiment1_noise_impact.py` | Noise impact analysis |
+| 2 | `experiment2_clod_effectiveness.py` | CLOD effectiveness |
+| 3 | `experiment3_clod_vs_sota.py` | CLOD vs SOTA (CLOD only) |
+| 4 | `experiment4_dataset_variants.py` | Dataset variants |
+| 5 | `experiment5_manual_inspection.py` | Manual inspection |
+| 6 | `experiment6_iou_threshold.py` | IoU threshold analysis |
 
-## 🚀 快速开始
+## Quick start
 
-### 前置要求
+### Prerequisites
 
-1. **已训练的baseline模型**
+1. **Trained baseline model**
    ```bash
-   # 如果还没有baseline模型，先训练一个
    python train_standard.py --data dataset.yaml --epochs 30 --name yolov8n_baseline_new
    ```
 
-2. **安装依赖**
+2. **Dependencies**
    ```bash
    pip install scikit-learn matplotlib pandas psutil
    ```
 
-3. **确保SafeDNN-Clean可用**
-   - 检查 `otherwork/safednn-clean/safednn-clean.py` 是否存在
+3. **SafeDNN-Clean**: ensure `otherwork/safednn-clean/safednn-clean.py` exists.
 
-### 运行实验
+### Run experiments
 
-#### 实验5: Manual Inspection（推荐先运行，最简单）
+#### Experiment 5: Manual Inspection (run first)
 
 ```bash
 python experiments/experiment5_manual_inspection.py \
@@ -41,235 +39,105 @@ python experiments/experiment5_manual_inspection.py \
     --split train
 ```
 
-**输出:**
-- `experiments/experiment5_results/manual_inspection_report.json` - 完整报告
-- `experiments/experiment5_results/quality_distribution.png` - 质量分布图
+Outputs: `experiment5_results/manual_inspection_report.json`, `quality_distribution.png`
 
----
-
-#### 实验2: CLOD Effectiveness
+#### Experiment 2: CLOD Effectiveness
 
 ```bash
 python experiments/experiment2_clod_effectiveness.py \
     --model runs/detect/yolov8n_baseline_new/weights/best.pt \
-    --split val \
-    --noise-ratio 0.2
+    --split val --noise-ratio 0.2
 ```
 
-**输出:**
-- `experiments/experiment2_results/clod_effectiveness_results.json` - 结果数据
-- `experiments/experiment2_results/auroc_results.png` - AUROC对比图
-- `experiments/experiment2_results/roc_curves.png` - ROC曲线
-- `experiments/experiment2_results/iou_threshold_analysis.png` - IoU阈值分析
+Adds 20% artificial noise; evaluates label, location, scale, spurious, missing; outputs AUROC and ROC.
 
-**说明:**
-- 会在验证集上添加20%的人工噪声
-- 测试5种噪声类型：label, location, scale, spurious, missing
-- 计算AUROC评估CLOD的检测效果
-
----
-
-#### 实验4: Dataset Variants
+#### Experiment 4: Dataset Variants
 
 ```bash
 python experiments/experiment4_dataset_variants.py \
     --model runs/detect/yolov8n_baseline_new/weights/best.pt \
-    --split train \
-    --suggestions-ratio 0.2
+    --split train --suggestions-ratio 0.2
 ```
 
-**输出:**
-- `experiments/experiment4_results/dataset_variants_report.json` - 完整报告
-- `experiments/experiment4_results/runs/` - 训练结果
+Builds Suggestions dataset (top 20% CLOD suggestions), trains and compares.
 
-**说明:**
-- 创建Suggestions数据集（应用CLOD前20%建议）
-- 训练并对比原始数据集和Suggestions数据集的性能
-
----
-
-#### 实验6: IoU Threshold Analysis
+#### Experiment 6: IoU Threshold
 
 ```bash
 python experiments/experiment6_iou_threshold.py \
     --model runs/detect/yolov8n_baseline_new/weights/best.pt \
-    --split val \
-    --noise-ratio 0.2
+    --split val --noise-ratio 0.2
 ```
 
-**输出:**
-- `experiments/experiment6_results/iou_threshold_results.json` - 结果数据
-- `experiments/experiment6_results/iou_threshold_analysis.png` - 分析图
-- `experiments/experiment6_results/iou_threshold_report.json` - 完整报告
+Sweeps IoU 0.3–0.7 and reports best IoU.
 
-**说明:**
-- 测试不同IoU阈值（0.3-0.7）对CLOD性能的影响
-- 找到最佳IoU阈值
-
----
-
-#### 实验3: CLOD vs SOTA
+#### Experiment 3: CLOD vs SOTA
 
 ```bash
 python experiments/experiment3_clod_vs_sota.py \
     --model runs/detect/yolov8n_baseline_new/weights/best.pt \
-    --split val \
-    --noise-ratio 0.25
+    --split val --noise-ratio 0.25
 ```
 
-**输出:**
-- `experiments/experiment3_results/clod_vs_sota_results.json` - 结果数据
-- `experiments/experiment3_results/clod_vs_sota_comparison.png` - 对比图
-- `experiments/experiment3_results/comparison_table.md` - 对比表格
+Note: ObjectLab is not implemented; only CLOD is run.
 
-**说明:**
-- ⚠️ 注意：ObjectLab需要单独实现，当前只运行CLOD部分
-- 对比CLOD和ObjectLab在检测人工噪声上的性能
-
----
-
-#### 实验1: Noise Impact
+#### Experiment 1: Noise Impact
 
 ```bash
 python experiments/experiment1_noise_impact.py
 ```
 
-**输出:**
-- `experiments/experiment1_results/noise_impact_results.json` - 结果数据
-- `experiments/experiment1_results/noise_impact.png` - 噪声影响图表
-- `experiments/experiment1_results/runs/` - 训练结果
+Trains on noisy datasets and plots noise type vs mAP@0.5.
 
-**说明:**
-- 训练不同噪声数据集上的模型，评估mAP@0.5
-- 绘制噪声类型与模型质量的关系图
-
----
-
-## 📊 实验输出结构
+## Output layout
 
 ```
 experiments/
-├── experiment2_results/
-│   ├── clod_effectiveness_results.json
-│   ├── auroc_results.png
-│   ├── roc_curves.png
-│   └── iou_threshold_analysis.png
-├── experiment3_results/
-│   ├── clod_vs_sota_results.json
-│   ├── clod_vs_sota_comparison.png
-│   └── comparison_table.md
-├── experiment4_results/
-│   ├── dataset_variants_report.json
-│   └── runs/
-│       ├── original/
-│       └── suggestions/
-├── experiment5_results/
-│   ├── manual_inspection_report.json
-│   └── quality_distribution.png
-└── experiment6_results/
-    ├── iou_threshold_results.json
-    ├── iou_threshold_analysis.png
-    └── iou_threshold_report.json
+├── experiment2_results/   (JSON, PNG)
+├── experiment3_results/   (JSON, PNG, MD)
+├── experiment4_results/   (report, runs/)
+├── experiment5_results/   (report, PNG)
+└── experiment6_results/   (JSON, PNG)
 ```
 
-## 🔧 辅助模块
+## Artificial noise module
 
-### 人工噪声生成模块
+`dataprocess/add_artificial_noise.py` adds artificial noise to COCO annotations.
 
-`dataprocess/add_artificial_noise.py` - 用于在COCO格式数据集上添加人工噪声
+Noise types: `label`, `location`, `scale`, `spurious`, `missing`. Example:
 
-**支持的噪声类型:**
-- `label`: 类别错误（随机替换类别）
-- `location`: 位置偏移（25%或50%的框尺寸）
-- `scale`: 尺寸变化（25%或50%的框尺寸）
-- `spurious`: 添加虚假标注框
-- `missing`: 删除标注框
-
-**用法:**
 ```bash
 python dataprocess/add_artificial_noise.py \
-    --input annotations_val_coco.json \
-    --output annotations_val_noisy.json \
-    --noise-type label \
-    --noise-ratio 0.2
+    --input annotations_val_coco.json --output annotations_val_noisy.json \
+    --noise-type label --noise-ratio 0.2
 ```
 
-## ⚙️ 配置说明
+## Defaults
 
-### 默认配置
+- Model: `runs/detect/yolov8n_baseline_new/weights/best.pt`
+- Split: `val`
+- Noise ratio: `0.2`
+- IoU: `0.5`
 
-所有实验脚本都使用以下默认配置：
+Override via CLI (e.g. `--model <path> --split train --noise-ratio 0.25`).
 
-- **模型**: `runs/detect/yolov8n_baseline_new/weights/best.pt`
-- **数据集分割**: `val`（验证集）
-- **噪声比例**: `0.2`（20%）
-- **IoU阈值**: `0.5`
+## Notes
 
-### 自定义配置
+1. Run order: 5 → 2 → 4 → 6 → 3 (5 first to verify env).
+2. Experiment 4 can take a long time (multiple trainings).
+3. Experiments 2, 3, 6 use disk for noisy datasets; have ~10GB free.
+4. Experiment 3: only CLOD is run; ObjectLab must be implemented separately.
 
-可以通过命令行参数自定义：
+## FAQ
 
-```bash
-python experiments/experiment2_clod_effectiveness.py \
-    --model <你的模型路径> \
-    --split train \
-    --noise-ratio 0.25
-```
+- **No baseline**: `python train_standard.py --data dataset.yaml --epochs 30 --name yolov8n_baseline_new`
+- **SafeDNN-Clean missing**: ensure `otherwork/safednn-clean/safednn-clean.py` exists
+- **Import error**: `pip install scikit-learn matplotlib pandas psutil`
+- **OOM**: reduce batch, use `--workers 0`, close other apps
 
-## 📝 注意事项
+## References
 
-1. **运行顺序**: 建议按以下顺序运行：
-   - 实验5（最简单，验证环境）
-   - 实验2（核心实验）
-   - 实验4（实用实验）
-   - 实验6（IoU分析）
-   - 实验3（需要ObjectLab）
+- [SafeDNN-Clean paper](https://arxiv.org/abs/2211.13993)
+- [Main README](../README.md)
 
-2. **训练时间**: 
-   - 实验4需要训练多个模型，可能需要较长时间
-   - 实验2和6需要运行多次CLOD分析，也需要一定时间
-
-3. **内存要求**:
-   - 实验2、3、6会生成多个噪声数据集，注意磁盘空间
-   - 建议至少10GB可用空间
-
-4. **ObjectLab**:
-   - 实验3需要ObjectLab实现，当前只运行CLOD部分
-   - 如需完整对比，需要实现或安装ObjectLab
-
-## 🐛 常见问题
-
-### Q1: 找不到baseline模型
-
-**A**: 先训练baseline模型：
-```bash
-python train_standard.py --data dataset.yaml --epochs 30 --name yolov8n_baseline_new
-```
-
-### Q2: SafeDNN-Clean脚本找不到
-
-**A**: 确保 `otherwork/safednn-clean/safednn-clean.py` 存在
-
-### Q3: 导入错误（scikit-learn）
-
-**A**: 安装依赖：
-```bash
-pip install scikit-learn matplotlib pandas psutil
-```
-
-### Q4: 内存不足
-
-**A**: 
-- 减小batch size
-- 使用`--workers 0`（单进程模式）
-- 关闭其他程序释放内存
-
-## 📚 参考
-
-- [SafeDNN-Clean论文](https://arxiv.org/abs/2211.13993)
-- [项目主README](../README.md)
-
----
-
-**开始使用**: 建议从实验5开始，验证环境配置是否正确！ 🚀
-
+Start with Experiment 5 to verify the environment.

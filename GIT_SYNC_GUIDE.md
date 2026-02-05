@@ -1,121 +1,70 @@
-# Git同步指南
+# Git Sync Guide
 
-本文档说明哪些文件会被上传到GitHub，哪些会被排除。
+This document describes which files are tracked by Git and which are ignored.
 
-## ✅ 会被上传的文件
+## Tracked files
 
-### 代码文件
-- 所有Python脚本（`.py`）
-- 配置文件（`.yaml`, `.yaml`）
-- README和文档（`.md`）
+### Code
+- All Python scripts (`.py`)
+- Config files (`.yaml`)
+- README and docs (`.md`)
 
-### 实验结果（重要）
-- `experiments/*_results/*_results.json` - 实验结果数据
-- `experiments/*_results/*_report.json` - 实验报告
-- `experiments/*_results/*_results.png` - 结果图表
-- `experiments/*_results/*_analysis.png` - 分析图表
-- `experiments/*_results/*_comparison.png` - 对比图表
-- `experiments/*_results/*_distribution.png` - 分布图表
-- `experiments/*_results/*_curves.png` - 曲线图
-- `experiments/README.md` - 实验说明文档
+### Experiment results
+- `experiments/*_results/*_results.json`
+- `experiments/*_results/*_report.json`
+- `experiments/*_results/*.png` (result/analysis/comparison/distribution/curves)
+- `experiments/README.md`
 
-### 工具和脚本
-- `tools/` - 所有工具脚本
-- `dataset/` - 数据集处理脚本
-- `experiments/` - 所有实验脚本
+### Tools and scripts
+- `tools/`
+- `dataset/`
+- `experiments/` (scripts)
 
-## ❌ 会被排除的文件
+## Ignored / excluded
 
-### 大文件（超过GitHub限制）
-- **数据集**：`cotton weed dataset/`（约几GB）
-- **模型权重**：`*.pt`, `*.pth`（每个几MB到几百MB）
-- **训练结果**：`runs/`（包含大量图片和权重）
-- **实验训练结果**：`experiments/*/runs/`（模型权重和训练图片）
+### Large files
+- **Dataset**: `cotton weed dataset/` (multi-GB)
+- **Weights**: `*.pt`, `*.pth`
+- **Training outputs**: `runs/`
+- **Experiment runs**: `experiments/*/runs/`
 
-### 临时文件
-- **输出文件**：`outputs/`（所有临时JSON文件）
-- **质量报告**：`quality_report_*.json`（可重新生成）
-- **标注文件**：`annotations_*_coco.json`（可重新生成）
-- **预测文件**：`predictions_*_coco.json`（可重新生成）
+### Temporary / generated
+- **Outputs**: `outputs/`
+- **Quality reports**: `quality_report_*.json`
+- **Annotations**: `annotations_*_coco.json`
+- **Predictions**: `predictions_*_coco.json`
+- `*.cache`, `labels.cache`, `__pycache__/`, `*.log`
+- `visualized_samples/`, `quality_issues/`
+- `experiments/**/train_batch*.jpg`, `experiments/**/val_batch*.jpg`
 
-### 缓存和临时数据
-- `*.cache` - 缓存文件
-- `labels.cache` - 标签缓存
-- `__pycache__/` - Python缓存
-- `*.log` - 日志文件
-
-### 可视化样本
-- `visualized_samples/` - 可视化样本图片
-- `quality_issues/` - 质量问题可视化
-- `experiments/**/train_batch*.jpg` - 训练批次图片
-- `experiments/**/val_batch*.jpg` - 验证批次图片
-
-## 📁 文件组织
-
-### outputs/ 文件夹
-所有临时生成的JSON文件已移动到 `outputs/` 文件夹：
-- 质量报告文件
-- COCO格式标注文件
-- 预测结果文件
-- 噪声标注文件
-- 清洗后的标注文件
-
-**这些文件会被.gitignore排除，不会上传到GitHub**
-
-### experiments/ 文件夹
-实验结果的重要文件会被保留：
-- JSON报告文件（`*_results.json`, `*_report.json`）
-- 重要图表（`*_results.png`, `*_analysis.png`等）
-- 实验脚本（`.py`文件）
-- README文档
-
-大文件会被排除：
-- 训练结果（`runs/`目录）
-- 模型权重（`weights/`目录）
-- 训练数据集副本（`train_*/`目录）
-- 训练/验证批次图片
-
-## 🔄 如何重新生成被排除的文件
-
-如果需要这些文件，可以重新运行相应的脚本：
+## Regenerating excluded files
 
 ```bash
-# 生成质量报告
 python tools/run_label_quality_analysis.py --model <model_path> --split train
-
-# 转换COCO格式
 python dataset/yolo_to_coco.py --split train
-
-# 生成预测
 python dataset/generate_predictions_coco.py --model <model_path> --split train
-
-# 运行实验
 python experiments/experiment2_clod_effectiveness.py --model <model_path>
 ```
 
-## 📊 预计上传大小
+## Approximate upload size
 
-- **代码文件**：< 1 MB
-- **实验结果JSON**：< 100 KB
-- **实验结果图表**：< 5 MB
-- **文档**：< 100 KB
+- Code: &lt; 1 MB  
+- Result JSONs: &lt; 100 KB  
+- Result figures: &lt; 5 MB  
+- Docs: &lt; 100 KB  
 
-**总计**：< 10 MB（符合GitHub要求）
+**Total**: &lt; 10 MB
 
-## ⚠️ 注意事项
+## Notes
 
-1. **数据集不会上传**：`cotton weed dataset/` 目录已被排除
-2. **模型权重不会上传**：所有 `.pt` 文件已被排除
-3. **临时文件不会上传**：`outputs/` 目录已被排除
-4. **实验结果会被保留**：重要的JSON报告和图表会被上传
+1. Dataset and model weights are not uploaded.
+2. Temporary outputs under `outputs/` are ignored.
+3. Important experiment JSON reports and figures are kept in the repo.
 
-## 🚀 同步到GitHub
-
-准备好后，可以执行：
+## Push to GitHub
 
 ```bash
 git add .
 git commit -m "Add experiment results and update documentation"
 git push origin main
 ```
-

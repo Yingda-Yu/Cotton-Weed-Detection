@@ -9,7 +9,7 @@ dependencies:
   - pytorch=2.5.1
   - torchvision=0.15.2
   - torchaudio=2.5.1
-  - pytorch-cuda=12.1  # CUDA 12.1 适配 4090
+  - pytorch-cuda=12.1  # CUDA 12.1 (e.g. RTX 4090)
   - pip
   - pip:
     - ultralytics>=8.0.0

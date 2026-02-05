@@ -44,10 +44,10 @@ METRIC_GROUPS = {
     }
 }
 
-# 颜色配置
+# Colors for baseline vs cleaned
 COLORS = {
-    "baseline": "#1f77b4",  # 蓝色
-    "cleaned": "#2ca02c"    # 绿色
+    "baseline": "#1f77b4",
+    "cleaned": "#2ca02c"
 }
 
 
@@ -98,7 +98,7 @@ def plot_loss_comparison(baseline_df, cleaned_df, output_dir):
     plt.tight_layout()
     output_file = output_dir / "loss_comparison.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"✅ Loss comparison chart saved: {output_file}")
+    print(f"Loss comparison chart saved: {output_file}")
     plt.close()
 
 
@@ -142,14 +142,14 @@ def plot_metrics_comparison(baseline_df, cleaned_df, output_dir):
     plt.tight_layout()
     output_file = output_dir / "metrics_comparison.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"✅ Metrics comparison chart saved: {output_file}")
+    print(f"Metrics comparison chart saved: {output_file}")
     plt.close()
 
 
 def plot_individual_metric(baseline_df, cleaned_df, metric, title, output_dir):
     """Plot individual metric comparison chart"""
     if metric not in baseline_df.columns or metric not in cleaned_df.columns:
-        print(f"⚠️  Metric {metric} not found, skipping")
+        print(f"Metric {metric} not found, skipping")
         return
     
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -188,7 +188,7 @@ def plot_individual_metric(baseline_df, cleaned_df, metric, title, output_dir):
     safe_metric_name = metric.replace('/', '_').replace('(', '').replace(')', '')
     output_file = output_dir / f"{safe_metric_name}.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"✅ {title} chart saved: {output_file}")
+    print(f"{title} chart saved: {output_file}")
     plt.close()
 
 
@@ -265,7 +265,7 @@ def plot_final_comparison(baseline_df, cleaned_df, output_dir):
     plt.tight_layout()
     output_file = output_dir / "final_comparison.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"✅ Final performance comparison chart saved: {output_file}")
+    print(f"Final performance comparison chart saved: {output_file}")
     plt.close()
 
 
@@ -307,7 +307,7 @@ def generate_comparison_report(baseline_df, cleaned_df, output_dir):
     with open(report_file, 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
     
-    print(f"✅ Comparison report saved: {report_file}")
+    print(f"Comparison report saved: {report_file}")
     
     # Print summary
     print("\n" + "=" * 70)
@@ -372,11 +372,11 @@ def main():
     cleaned_path = Path(args.cleaned)
     
     if not baseline_path.exists():
-        print(f"❌ Baseline results file not found: {baseline_path}")
+        print(f"Baseline results file not found: {baseline_path}")
         return 1
-    
+
     if not cleaned_path.exists():
-        print(f"❌ Cleaned results file not found: {cleaned_path}")
+        print(f"Cleaned results file not found: {cleaned_path}")
         return 1
     
     # Create output directory
@@ -402,32 +402,21 @@ def main():
     # Generate charts
     print("\nGenerating comparison charts...")
     
-    # 1. Loss comparison (all loss metrics in one chart)
     plot_loss_comparison(baseline_df, cleaned_df, output_dir)
-    
-    # 2. Metrics comparison (all metrics in one chart)
     plot_metrics_comparison(baseline_df, cleaned_df, output_dir)
-    
-    # 3. Final performance comparison bar chart
     plot_final_comparison(baseline_df, cleaned_df, output_dir)
-    
-    # 4. If specified, generate individual charts for each metric
+
     if args.individual:
         print("\nGenerating individual metric charts...")
-        
-        # Loss metrics
         for metric, title in METRIC_GROUPS["loss"].items():
             plot_individual_metric(baseline_df, cleaned_df, metric, title, output_dir)
-        
-        # Evaluation metrics
         for metric, title in METRIC_GROUPS["metrics"].items():
             plot_individual_metric(baseline_df, cleaned_df, metric, title, output_dir)
-    
-    # 5. Generate comparison report
+
     generate_comparison_report(baseline_df, cleaned_df, output_dir)
     
     print("\n" + "=" * 70)
-    print("✅ All charts generated successfully!")
+    print("All charts generated successfully.")
     print("=" * 70)
     print(f"Output directory: {output_dir.absolute()}")
     print("\nGenerated charts:")

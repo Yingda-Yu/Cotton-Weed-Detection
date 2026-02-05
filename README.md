@@ -1,106 +1,106 @@
-# 🌾 Cotton Weed Detection - 棉花杂草检测项目
+# 🌾 Cotton Weed Detection
 
-基于YOLOv8的数据中心AI方法，使用SafeDNN-Clean进行自动数据清洗和标签质量提升。
-
----
-
-## 📋 目录
-
-- [快速开始](#快速开始)
-- [项目结构](#项目结构)
-- [核心功能](#核心功能)
-- [数据清洗流程](#数据清洗流程)
-- [数据集处理](#数据集处理)
-- [详细使用说明](#详细使用说明)
-- [常见问题](#常见问题)
+Data-centric AI for cotton weed detection using YOLOv8 and SafeDNN-Clean for automatic data cleaning and label quality improvement.
 
 ---
 
-## 🚀 快速开始
+## 📋 Table of Contents
 
-### 1. 训练模型
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Core Features](#core-features)
+- [Data Cleaning Pipeline](#data-cleaning-pipeline)
+- [Dataset Handling](#dataset-handling)
+- [Usage Details](#usage-details)
+- [FAQ](#faq)
+
+---
+
+## 🚀 Quick Start
+
+### 1. Train a model
 
 ```bash
-# 使用原始数据训练
+# Train on original data
 python train_standard.py --data dataset.yaml --epochs 30
 
-# 使用清洗后的数据训练
+# Train on cleaned data
 python train_standard.py --data dataset_cleaned.yaml --epochs 30
 ```
 
-### 2. 生成预测
+### 2. Generate predictions
 
 ```bash
 python predict.py --model runs/detect/xxx/weights/best.pt
 ```
 
-### 3. 完整工作流程（推荐）
+### 3. Full workflow (recommended)
 
 ```bash
-# 一键完成：baseline训练 → 数据清洗 → 清洗后训练 → 性能对比
+# One-shot: baseline training → data cleaning → cleaned training → performance comparison
 python run_complete_workflow.py
 ```
 
 ---
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 Cotton Weed Detect/
-├── train_standard.py          # 核心：训练脚本
-├── predict.py                 # 核心：预测脚本
-├── run_complete_workflow.py  # 核心：完整工作流程
+├── train_standard.py          # Core: training script
+├── predict.py                 # Core: prediction script
+├── run_complete_workflow.py   # Core: full workflow
 │
-├── tools/                     # 工具类脚本
-│   ├── run_label_quality_analysis.py  # 标签质量分析
-│   ├── clean_dataset.py               # 数据清洗
-│   ├── run_cleaning_and_comparison.py # 清洗对比流程
-│   ├── visualize_quality_report.py    # 可视化质量报告
-│   └── visualize_annotations.py       # 可视化标注
+├── tools/                     # Utility scripts
+│   ├── run_label_quality_analysis.py  # Label quality analysis
+│   ├── clean_dataset.py               # Data cleaning
+│   ├── run_cleaning_and_comparison.py # Cleaning & comparison pipeline
+│   ├── visualize_quality_report.py   # Quality report visualization
+│   └── visualize_annotations.py       # Annotation visualization
 │
-├── dataset/                   # 数据集处理工具
-│   ├── yolo_to_coco.py        # YOLO转COCO格式
-│   ├── coco_to_yolo.py        # COCO转YOLO格式
-│   └── generate_predictions_coco.py  # 生成COCO格式预测
+├── dataset/                   # Dataset utilities
+│   ├── yolo_to_coco.py        # YOLO to COCO format
+│   ├── coco_to_yolo.py        # COCO to YOLO format
+│   └── generate_predictions_coco.py  # COCO-format predictions
 │
-├── dataset.yaml               # 数据集配置
-├── dataset_cleaned.yaml       # 清洗后数据集配置
+├── dataset.yaml               # Dataset config (original)
+├── dataset_cleaned.yaml       # Dataset config (cleaned)
 │
-├── train/                     # 训练集
-├── val/                       # 验证集
-├── test/                      # 测试集
-├── cleaned_train/             # 清洗后的训练集
+├── train/                     # Training set
+├── val/                       # Validation set
+├── test/                      # Test set
+├── cleaned_train/             # Cleaned training set
 │
-├── runs/                      # 训练结果
-├── yolov8n.pt                 # 预训练权重
+├── runs/                      # Training outputs
+├── yolov8n.pt                 # Pretrained weights
 │
-└── otherwork/safednn-clean/   # SafeDNN-Clean框架
+└── otherwork/safednn-clean/   # SafeDNN-Clean framework
 ```
 
 ---
 
-## 🎯 核心功能
+## 🎯 Core Features
 
-### 训练模型
+### Training
 
-**基本使用：**
+**Basic usage:**
 ```bash
 python train_standard.py --data dataset.yaml --epochs 30 --batch 8
 ```
 
-**参数说明：**
-- `--data`: 数据集配置文件（dataset.yaml 或 dataset_cleaned.yaml）
-- `--epochs`: 训练轮数（默认30）
-- `--batch`: 批次大小（默认16）
-- `--imgsz`: 图像尺寸（默认640）
-- `--device`: 设备（0表示GPU，'cpu'表示CPU）
-- `--workers`: 数据加载进程数（默认4，内存不足时设为0）
-- `--name`: 运行名称（默认yolov8n_standard）
-- `--resume`: 从checkpoint恢复训练
+**Arguments:**
+- `--data`: Dataset YAML path (dataset.yaml or dataset_cleaned.yaml)
+- `--epochs`: Number of epochs (default 30)
+- `--batch`: Batch size (default 16)
+- `--imgsz`: Image size (default 640)
+- `--device`: Device (0 for GPU, 'cpu' for CPU)
+- `--workers`: DataLoader workers (default 4; use 0 if low memory)
+- `--name`: Run name (default yolov8n_standard)
+- `--resume`: Path to checkpoint to resume training
 
-**示例：**
+**Example:**
 ```bash
-# 从checkpoint恢复训练
+# Resume from checkpoint
 python train_standard.py \
     --data dataset_cleaned.yaml \
     --epochs 30 \
@@ -109,41 +109,41 @@ python train_standard.py \
     --resume runs/detect/yolov8n_cleaned_train/weights/last.pt
 ```
 
-### 生成预测
+### Prediction
 
-**基本使用：**
+**Basic usage:**
 ```bash
 python predict.py --model runs/detect/xxx/weights/best.pt
 ```
 
-**参数说明：**
-- `--model`: 模型权重路径
-- `--conf`: 置信度阈值（默认0.25）
-- `--output`: 输出CSV文件（默认submission.csv）
+**Arguments:**
+- `--model`: Path to model weights
+- `--conf`: Confidence threshold (default 0.25)
+- `--output`: Output CSV path (default submission.csv)
 
 ---
 
-## 🔧 数据清洗流程
+## 🔧 Data Cleaning Pipeline
 
-### 完整工作流程
+### Full workflow
 
-使用 `run_complete_workflow.py` 一键完成所有步骤：
+Use `run_complete_workflow.py` to run all steps:
 
 ```bash
 python run_complete_workflow.py
 ```
 
-这会自动执行：
-1. 训练baseline模型
-2. 分析训练集标签质量
-3. 清洗训练集标注
-4. 准备清洗后的数据集
-5. 使用清洗后的数据训练
-6. 性能对比
+This runs:
+1. Baseline model training
+2. Training set label quality analysis
+3. Training set annotation cleaning
+4. Preparation of cleaned dataset
+5. Training on cleaned data
+6. Performance comparison
 
-### 分步执行
+### Step-by-step
 
-#### 步骤1: 标签质量分析
+#### Step 1: Label quality analysis
 
 ```bash
 python tools/run_label_quality_analysis.py \
@@ -151,18 +151,18 @@ python tools/run_label_quality_analysis.py \
     --split train
 ```
 
-**参数说明：**
-- `--model`: 模型权重路径
-- `--split`: 数据集分割（train或val）
-- `--iou`: IoU聚类阈值（默认0.5）
-- `--threshold`: 质量分数阈值（默认0.5）
-- `--conf`: 预测置信度阈值（默认0.25）
+**Arguments:**
+- `--model`: Model weights path
+- `--split`: Split (train or val)
+- `--iou`: IoU clustering threshold (default 0.5)
+- `--threshold`: Quality score threshold (default 0.5)
+- `--conf`: Prediction confidence threshold (default 0.25)
 
-**输出：**
-- `quality_report_train.json` - 质量分析报告
-- `predictions_train_coco.json` - 预测结果
+**Outputs:**
+- `quality_report_train.json` – quality report
+- `predictions_train_coco.json` – predictions
 
-#### 步骤2: 自动清洗数据
+#### Step 2: Auto-clean data
 
 ```bash
 python tools/clean_dataset.py \
@@ -174,40 +174,40 @@ python tools/clean_dataset.py \
     --missing-threshold 0.5
 ```
 
-**参数说明：**
-- `--quality-report`: 质量报告文件
-- `--predictions`: 预测结果文件
-- `--output`: 输出文件
-- `--location-threshold`: Location修复的预测分数阈值（默认0.7）
-- `--label-threshold`: Label修复的预测分数阈值（默认0.8）
-- `--missing-threshold`: Missing添加的预测分数阈值（默认0.5）
+**Arguments:**
+- `--quality-report`: Quality report path
+- `--predictions`: Predictions path
+- `--output`: Output path
+- `--location-threshold`: Score threshold for Location fixes (default 0.7)
+- `--label-threshold`: Score threshold for Label fixes (default 0.8)
+- `--missing-threshold`: Score threshold for Missing additions (default 0.5)
 
-**清洗规则：**
-1. **Spurious（虚假标注）**: 直接删除
-2. **Location（定位错误）**: 用模型预测框替换（当预测分数≥阈值）
-3. **Label（类别错误）**: 用模型预测类别替换（当预测分数≥阈值）
-4. **Missing（缺失标注）**: 添加模型预测框（当预测分数≥阈值）
+**Cleaning rules:**
+1. **Spurious**: Remove annotation
+2. **Location**: Replace bbox with model prediction when score ≥ threshold
+3. **Label**: Replace category with model prediction when score ≥ threshold
+4. **Missing**: Add model prediction when score ≥ threshold
 
-#### 步骤3: 转换格式并准备数据集
+#### Step 3: Convert and prepare dataset
 
 ```bash
-# 转换为YOLO格式
+# Convert to YOLO format
 python dataset/coco_to_yolo.py \
     --coco-file cleaned_train_annotations.json \
     --split train \
     --output-dir cleaned_train
 
-# 复制图片文件（Windows PowerShell）
+# Copy images (Windows PowerShell)
 Copy-Item -Path "train\images\*" -Destination "cleaned_train\images\" -Recurse
 ```
 
-#### 步骤4: 使用清洗后的数据训练
+#### Step 4: Train on cleaned data
 
 ```bash
 python train_standard.py --data dataset_cleaned.yaml --epochs 30
 ```
 
-### 可视化质量报告
+### Visualize quality report
 
 ```bash
 python tools/visualize_quality_report.py \
@@ -219,17 +219,17 @@ python tools/visualize_quality_report.py \
 
 ---
 
-## 📊 数据集处理
+## 📊 Dataset Handling
 
-### 格式转换
+### Format conversion
 
-#### YOLO转COCO
+#### YOLO to COCO
 
 ```bash
 python dataset/yolo_to_coco.py --split train --output annotations_train_coco.json
 ```
 
-#### COCO转YOLO
+#### COCO to YOLO
 
 ```bash
 python dataset/coco_to_yolo.py \
@@ -238,7 +238,7 @@ python dataset/coco_to_yolo.py \
     --output-dir cleaned_train
 ```
 
-### 生成预测
+### Generate predictions
 
 ```bash
 python dataset/generate_predictions_coco.py \
@@ -251,31 +251,31 @@ python dataset/generate_predictions_coco.py \
 
 ---
 
-## 📖 详细使用说明
+## 📖 Usage Details
 
-### 错误类型说明
+### Issue types (SafeDNN-Clean)
 
-SafeDNN-Clean会自动识别4种标注问题：
+SafeDNN-Clean identifies four annotation issues:
 
-1. **Spurious（虚假标注）**
-   - 含义：标注了但模型没检测到
-   - 修复：删除误标注
+1. **Spurious**
+   - Annotated but not detected by model
+   - Fix: Remove the annotation
 
-2. **Missing（缺失标注）**
-   - 含义：模型检测到了但没标注
-   - 修复：添加缺失标注
+2. **Missing**
+   - Detected by model but not annotated
+   - Fix: Add the missing annotation
 
-3. **Location（定位错误）**
-   - 含义：类别对但边界框位置不准
-   - 修复：调整边界框位置
+3. **Location**
+   - Correct class but wrong bbox
+   - Fix: Adjust bbox (e.g. use model prediction)
 
-4. **Label（类别错误）**
-   - 含义：检测到了但类别标注错误
-   - 修复：修正类别标签
+4. **Label**
+   - Wrong class
+   - Fix: Correct the class label
 
-### 质量报告解读
+### Quality report format
 
-质量报告 `quality_report_train.json` 包含：
+`quality_report_train.json` structure:
 
 ```json
 {
@@ -285,267 +285,186 @@ SafeDNN-Clean会自动识别4种标注问题：
       "image_id": 45,
       "category_id": 0,
       "bbox": [100, 200, 50, 60],
-      "quality": 0.32,  // 质量分数（越低越差）
-      "issue": "spurious"  // 问题类型
+      "quality": 0.32,
+      "issue": "spurious"
     }
   ]
 }
 ```
 
-- **质量分数（quality）**: 0-1，越低表示质量越差
-- **问题类型（issue）**: spurious/missing/location/label
+- **quality**: 0–1; lower means worse quality
+- **issue**: spurious | missing | location | label
 
-### 最佳实践
+### Best practices
 
-1. **优先级排序**：
-   - 高置信度假阳性（conf > 0.7的missing）
-   - 低质量分数标注（quality < 0.3）
-   - 类别错误（label类型）
-   - 定位错误（location类型）
-
-2. **阈值调整策略**：
-   - **保守策略**（高阈值）：只修复高置信度错误
-   - **激进策略**（低阈值）：修复更多潜在错误
-
-3. **迭代优化**：
-   - 第一次清洗使用保守阈值
-   - 根据性能提升调整阈值
-   - 多次迭代直到性能稳定
+1. **Priority**: High-confidence false negatives (missing, conf > 0.7) → low-quality (quality < 0.3) → label → location
+2. **Thresholds**: Conservative (high) = fix only high-confidence; aggressive (low) = fix more
+3. **Iteration**: Start with conservative thresholds, then adjust and re-run
 
 ---
 
-## 🐛 常见问题
+## 🐛 FAQ
 
-### Q1: SafeDNN-Clean脚本找不到？
+### Q1: SafeDNN-Clean script not found?
 
-**A**: 确保 `otherwork/safednn-clean/safednn-clean.py` 存在。
+**A:** Ensure `otherwork/safednn-clean/safednn-clean.py` exists.
 
-### Q2: cleanlab导入失败？
+### Q2: cleanlab import error?
 
-**A**: 安装cleanlab：
+**A:** Install cleanlab:
 ```bash
 pip install cleanlab>=2.2.0
 ```
 
-### Q3: 内存不足错误？
+### Q3: Out of memory?
 
-**A**: 
-- 设置 `--workers 0`（单进程模式）
-- 减小 `--batch` 大小
-- 增加Windows页面文件大小
+**A:**
+- Use `--workers 0` (single process)
+- Reduce `--batch`
+- Increase Windows page file size if needed
 
-### Q4: 训练中断如何恢复？
+### Q4: How to resume training?
 
-**A**: 使用 `--resume` 参数：
+**A:** Use `--resume`:
 ```bash
 python train_standard.py --resume runs/detect/xxx/weights/last.pt
 ```
 
-### Q5: 清洗后性能下降？
+### Q5: Performance drops after cleaning?
 
-**A**: 可能原因：
-- 训练轮数不足（建议30 epochs）
-- 标注删除过多
-- 清洗阈值需要调整
+**A:** Possible causes: too few epochs (try 30), too many removals, or thresholds need tuning.
 
 ---
 
-## 📊 实验结果
+## 📊 Experiment Results
 
-本项目完成了6个核心实验，全面评估了CLOD（SafeDNN-Clean）方法在数据清洗和标签质量提升方面的有效性。
+Six experiments evaluate CLOD (SafeDNN-Clean) for data cleaning and label quality.
 
-### 实验概览
+### Overview
 
-| 实验 | 名称 | 主要发现 |
-|------|------|---------|
-| 实验1 | 噪声影响分析 | 评估不同噪声类型对模型性能的影响 |
-| 实验2 | CLOD有效性评估 | CLOD在类别错误检测上AUROC=0.79，位置偏移检测AUROC=0.86 |
-| 实验3 | CLOD vs SOTA | CLOD在25%噪声比例下，类别错误检测AUROC=0.88 |
-| 实验4 | 数据集变体实验 | **应用CLOD建议后，模型mAP@0.5提升50.39%** |
-| 实验5 | 人工检查实验 | 识别了493个问题标注（40.5%），其中264个为虚假标注 |
-| 实验6 | IoU阈值分析 | 最佳IoU阈值为0.3，平均AUROC=0.67 |
+| Experiment | Name | Main finding |
+|------------|------|--------------|
+| 1 | Noise impact | Effect of noise type on model performance |
+| 2 | CLOD effectiveness | Label noise AUROC=0.79, location AUROC=0.86 |
+| 3 | CLOD vs SOTA | CLOD label AUROC=0.88 at 25% noise |
+| 4 | Dataset variants | **mAP@0.5 +50.39% after applying CLOD suggestions** |
+| 5 | Manual inspection | 493 issues (40.5%), 264 spurious |
+| 6 | IoU threshold | Best IoU=0.3, mean AUROC=0.67 |
 
-### 实验2：CLOD有效性评估
+### Experiment 2: CLOD effectiveness
 
-**实验设置**：在验证集（255张图片，471个标注）上添加20%人工噪声
+**Setup:** 20% artificial noise on validation set (255 images, 471 annotations).
 
-**关键结果**（IoU=0.5）：
+**Results (IoU=0.5):**
 
-| 噪声类型 | AUROC | 表现评价 |
-|---------|-------|---------|
-| **Label** (类别错误) | **0.7876** | ✅ 优秀 |
-| **Location_20** (位置偏移20%) | **0.8571** | ✅ 优秀 |
-| **Location_50** (位置偏移50%) | 0.0000 | ❌ 无法检测 |
-| **Scale_20** (尺寸变化20%) | 0.5143 | ⚠️ 略好于随机 |
-| **Scale_50** (尺寸变化50%) | 0.5875 | ⚠️ 中等 |
-| **Spurious** (虚假标注) | 0.5000 | ❌ 随机水平 |
-| **Missing** (缺失标注) | 0.0000 | ❌ 无法检测 |
+| Noise type | AUROC | Note |
+|------------|-------|------|
+| **Label** | **0.7876** | ✅ Strong |
+| **Location_20** | **0.8571** | ✅ Strong |
+| **Location_50** | 0.0000 | ❌ Not detected |
+| **Scale_20** | 0.5143 | ⚠️ Slightly above random |
+| **Scale_50** | 0.5875 | ⚠️ Moderate |
+| **Spurious** | 0.5000 | ❌ Random |
+| **Missing** | 0.0000 | ❌ Not detected |
 
-**结论**：CLOD在检测类别错误和小幅位置偏移方面表现优秀，但在虚假标注和缺失标注检测上效果有限。
+**Conclusion:** CLOD works well for label and small location errors; limited for spurious and missing.
 
-### 实验3：CLOD vs SOTA对比
+### Experiment 3: CLOD vs SOTA
 
-**实验设置**：在验证集上添加25%人工噪声，对比CLOD与ObjectLab（SOTA方法）
+**Setup:** 25% noise; compare CLOD with ObjectLab.
 
-**关键结果**：
+**Results:** CLOD label AUROC **0.8793**, location_20 **0.8571**; others similar to Exp. 2.
 
-| 噪声类型 | CLOD AUROC | 说明 |
-|---------|-----------|------|
-| **Label** | **0.8793** | 优秀表现 |
-| **Location_20** | **0.8571** | 优秀表现 |
-| **Location_50** | 0.0000 | 无法检测 |
-| **Scale_20** | 0.5061 | 略好于随机 |
-| **Scale_50** | 0.5931 | 中等表现 |
-| **Spurious** | 0.5000 | 随机水平 |
-| **Missing** | 0.0000 | 无法检测 |
+### Experiment 4: Dataset variants ⭐
 
-**结论**：CLOD在类别错误检测上表现优秀（AUROC=0.88），在更高噪声比例下表现更好。
+**Setup:** Apply top 20% CLOD suggestions, then train and compare.
 
-### 实验4：数据集变体实验 ⭐
+**Results:**
 
-**实验设置**：应用CLOD前20%的建议，训练模型并对比性能
+| Dataset | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall |
+|---------|---------|---------------|-----------|--------|
+| **Original** | 0.3710 | 0.1894 | 0.6260 | 0.5839 |
+| **Suggestions** | **0.5579** | **0.4105** | **0.6708** | 0.5229 |
+| **Change** | **+0.1869** | **+0.2211** | **+0.0448** | -0.0610 |
+| **% change** | **+50.39%** | **+116.79%** | **+7.15%** | -10.45% |
 
-**关键结果**：
+- Original annotations: 1,061 → Suggestions: 724 (264 spurious removed); 98 suggestions applied (top 20%).
 
-| 数据集 | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall |
-|--------|---------|--------------|-----------|--------|
-| **原始数据集** | 0.3710 | 0.1894 | 0.6260 | 0.5839 |
-| **Suggestions数据集** | **0.5579** | **0.4105** | **0.6708** | 0.5229 |
-| **改进** | **+0.1869** | **+0.2211** | **+0.0448** | -0.0610 |
-| **改进百分比** | **+50.39%** | **+116.79%** | **+7.15%** | -10.45% |
+**Conclusion:** CLOD-based cleaning gave >50% mAP@0.5 gain, showing impact of data quality.
 
-**数据集变化**：
-- 原始标注数：1,061个
-- Suggestions标注数：724个（删除了264个虚假标注）
-- 应用的建议数：98个（前20%）
+### Experiment 5: Manual inspection
 
-**结论**：通过CLOD自动清洗，模型性能提升超过50%，证明了数据质量对模型性能的重要影响。
+**Setup:** CLOD on training set (593 images, 1,061 annotations).
 
-### 实验5：人工检查实验
+**Results:** 493 annotations with quality scores (40.5%). Issue distribution: Spurious 264 (53.5%), Missing 156 (31.6%), Location 47 (9.5%), Label 26 (5.3%). Quality stats: min 0.04, max 0.50, mean 0.11.
 
-**实验设置**：在训练集（593张图片，1,061个标注）上运行CLOD分析
+### Experiment 6: IoU threshold
 
-**关键结果**：
+**Setup:** IoU thresholds 0.3–0.7.
 
-| 指标 | 数值 |
-|------|------|
-| **总标注数** | 1,217 |
-| **有质量分数的标注** | 493 (40.5%) |
-| **需要人工检查的标注** | 0 (0.00%) |
+**Results:** Best overall IoU=0.3 (mean AUROC=0.67). Location benefits from low IoU (0.3–0.4); Label/Scale from high (0.6–0.7).
 
-**问题类型分布**：
+### Summary
 
-| 问题类型 | 数量 | 占比 |
-|---------|------|------|
-| **Spurious** (虚假标注) | 264 | 53.5% |
-| **Missing** (缺失标注) | 156 | 31.6% |
-| **Location** (定位错误) | 47 | 9.5% |
-| **Label** (类别错误) | 26 | 5.3% |
+1. CLOD is strong on label and small location errors (AUROC>0.78).
+2. Applying CLOD suggestions improved mAP@0.5 by 50.39%.
+3. Spurious is the dominant issue type (53.5%).
+4. Use IoU≈0.3 for general use; tune by noise type.
 
-**质量分数统计**：
-- 最低：0.0400
-- 最高：0.4992
-- 平均：0.1119
-- 中位数：0.0400
-- 75%分位数：0.1331
-
-**结论**：CLOD能够自动识别40.5%的标注存在问题，其中虚假标注是最主要的问题类型。
-
-### 实验6：IoU阈值分析
-
-**实验设置**：测试不同IoU阈值（0.3-0.7）对CLOD性能的影响
-
-**关键结果**：
-
-| IoU阈值 | 平均AUROC | 标准差 | 有效噪声类型数 |
-|---------|----------|--------|---------------|
-| **0.3** | **0.6695** | ±0.1654 | 4 |
-| **0.4** | 0.6652 | ±0.1606 | 4 |
-| **0.5** | 0.6007 | ±0.1323 | 3 |
-| **0.6** | 0.6086 | ±0.1421 | 3 |
-| **0.7** | 0.6234 | ±0.1380 | 3 |
-
-**不同噪声类型的最佳IoU阈值**：
-
-| 噪声类型 | 最佳IoU | 最佳AUROC |
-|---------|---------|----------|
-| **Label** | 0.7 | 0.8161 |
-| **Location_25** | 0.3 | 0.8667 |
-| **Scale_25** | 0.7 | 0.5541 |
-| **Spurious** | 任意 | 0.5000 |
-| **Missing** | 任意 | 0.0000 |
-
-**结论**：
-- 综合最佳IoU阈值：0.3（能检测更多噪声类型）
-- Location噪声需要低IoU阈值（0.3-0.4）
-- Label和Scale噪声需要高IoU阈值（0.6-0.7）
-- 建议根据主要噪声类型选择合适的IoU阈值
-
-### 实验总结
-
-1. **CLOD有效性**：在类别错误和小幅位置偏移检测上表现优秀（AUROC>0.78）
-2. **数据清洗价值**：应用CLOD建议后，模型性能提升50.39%
-3. **问题分布**：虚假标注是最主要的问题类型（53.5%）
-4. **IoU阈值选择**：根据噪声类型选择合适的IoU阈值，综合应用建议使用0.3
-
-**详细实验结果**：所有实验结果保存在 `experiments/` 目录下，包括JSON报告和可视化图表。
+All experiment outputs are under `experiments/` (JSON reports and figures).
 
 ---
 
-## 📚 数据集信息
+## 📚 Dataset Info
 
-- **任务**: 多类别杂草检测（3个类别）
-- **格式**: YOLO格式（归一化坐标）
-- **模型**: YOLOv8n（固定，符合竞赛要求）
-- **训练集**: 593张图片，1,061个标注
-- **验证集**: 255张图片，471个标注
-- **测试集**: 170张图片（无标注）
+- **Task:** Multi-class weed detection (3 classes)
+- **Format:** YOLO (normalized coordinates)
+- **Model:** YOLOv8n (fixed for competition)
+- **Train:** 593 images, 1,061 annotations
+- **Val:** 255 images, 471 annotations
+- **Test:** 170 images (no labels)
 
-### 类别
+### Classes
 
-- **0**: Carpetweed（地毯草）
-- **1**: Morning Glory（牵牛花）
-- **2**: Palmer Amaranth（长芒苋）
+- **0:** Carpetweed
+- **1:** Morning Glory
+- **2:** Palmer Amaranth
 
 ---
 
-## 📝 提交格式
+## 📝 Submission Format
 
-CSV文件，列名：`image_id,prediction_string`
+CSV columns: `image_id`, `prediction_string`
 
-**预测字符串格式**：
+**Prediction string format:**
 ```
 class_id confidence x_center y_center width height
 ```
 
-**示例**：
+**Example:**
 ```csv
 image_id,prediction_string
 20190613_6062W_CM_29,0 0.95 0.5 0.3 0.2 0.4 1 0.87 0.7 0.6 0.15 0.25
 20200624_iPhone6_SY_132,no box
 ```
 
-**要求**：
-- 列名必须小写
-- 坐标归一化到[0, 1]
-- 无检测时使用 `no box`
+**Rules:** Column names lowercase; coordinates in [0, 1]; use `no box` when no detections.
 
 ---
 
-## 🔗 参考资料
+## 🔗 References
 
-- [SafeDNN-Clean论文](https://arxiv.org/abs/2211.13993)
-- [CleanLab文档](https://docs.cleanlab.ai/)
-- [YOLOv8文档](https://docs.ultralytics.com/)
-- [COCO格式说明](https://cocodataset.org/#format-data)
-
----
-
-## 📄 许可证
-
-数据集仅供竞赛使用，详见官方竞赛规则。
+- [SafeDNN-Clean paper](https://arxiv.org/abs/2211.13993)
+- [CleanLab docs](https://docs.cleanlab.ai/)
+- [YOLOv8 docs](https://docs.ultralytics.com/)
+- [COCO format](https://cocodataset.org/#format-data)
 
 ---
 
-**开始使用：** `python run_complete_workflow.py` 🚀
+## 📄 License
 
+Dataset for competition use only; see official competition rules.
+
+---
+
+**Get started:** `python run_complete_workflow.py` 🚀

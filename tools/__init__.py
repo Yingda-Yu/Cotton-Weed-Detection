@@ -1,1 +1,1 @@
-"""工具类脚本目录"""
+"""Utility scripts package."""
