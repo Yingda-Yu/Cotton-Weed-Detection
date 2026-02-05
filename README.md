@@ -361,11 +361,6 @@ Six experiments evaluate CLOD (SafeDNN-Clean) for data cleaning and label qualit
 |------------|-------|------|
 | **Label** | **0.7876** | ✅ Strong |
 | **Location_20** | **0.8571** | ✅ Strong |
-| **Location_50** | 0.0000 | ❌ Not detected |
-| **Scale_20** | 0.5143 | ⚠️ Slightly above random |
-| **Scale_50** | 0.5875 | ⚠️ Moderate |
-| **Spurious** | 0.5000 | ❌ Random |
-| **Missing** | 0.0000 | ❌ Not detected |
 
 **Conclusion:** CLOD works well for label and small location errors; limited for spurious and missing.
 
