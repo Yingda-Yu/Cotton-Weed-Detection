@@ -1,3 +1,5 @@
+
+
 # 🌾 Cotton Weed Detection
 
 Data-centric AI for cotton weed detection using YOLOv8 and SafeDNN-Clean for automatic data cleaning and label quality improvement.
@@ -369,6 +371,8 @@ Six experiments evaluate CLOD (SafeDNN-Clean) for data cleaning and label qualit
 **Setup:** 25% noise; compare CLOD with ObjectLab.
 
 **Results:** CLOD label AUROC **0.8793**, location_20 **0.8571**; others similar to Exp. 2.
+
+**Note:** ObjectLab was not implemented; only CLOD results are reported.
 
 ### Experiment 4: Dataset variants ⭐
 
